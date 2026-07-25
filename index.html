@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financiamiento Juliaca | Tu Vehículo, Tu Proyecto</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Estilos para el Modal del Logo */
         .logo-modal {
@@ -49,7 +49,7 @@
             to {transform: scale(1); opacity: 1;}
         }
 
-        /* Galería/Mosaico de Vehículos de Fondo en la Sección Principal */
+        /* Galería de Vehículos en la Portada */
         .vehiculos-fondo-container {
             display: flex;
             justify-content: center;
@@ -61,31 +61,31 @@
         }
 
         .vehiculo-card-fondo {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(5px);
             border-radius: 12px;
-            padding: 15px;
-            width: 180px;
+            padding: 20px 15px;
+            width: 170px;
             text-align: center;
             transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .vehiculo-card-fondo:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.22);
         }
 
-        .vehiculo-card-fondo img {
-            width: 100%;
-            height: 90px;
-            object-fit: contain;
-            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.4));
+        .vehiculo-card-fondo i {
+            font-size: 3rem;
+            color: #00d2ff;
+            margin-bottom: 10px;
+            display: block;
+            text-shadow: 0 2px 10px rgba(0,210,255,0.3);
         }
 
         .vehiculo-card-fondo span {
             display: block;
-            margin-top: 8px;
             color: #ffffff;
             font-size: 0.85rem;
             font-weight: bold;
@@ -127,23 +127,23 @@
                 <a href="https://wa.me/c/51900327800" target="_blank" class="btn-secondary"><i class="fas fa-store"></i> Ver Catálogo WhatsApp</a>
             </div>
 
-            <!-- Mosaico de Vehículos (Auto, SUV/Camioneta Cerrada, Pickup/Camioneta Abierta, Volquete) -->
+            <!-- Tarjetas de Categorías de Vehículos -->
             <div class="vehiculos-fondo-container">
                 <div class="vehiculo-card-fondo">
-                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_white_sedan_car_side_view_png_18968.png" alt="Auto Sedán">
-                    <span>Auto</span>
+                    <i class="fas fa-car-side"></i>
+                    <span>Auto Sedán</span>
                 </div>
                 <div class="vehiculo-card-fondo">
-                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_black_suv_car_side_view_png_18972.png" alt="Camioneta Cerrada / SUV">
-                    <span>Camioneta Cerrada</span>
+                    <i class="fas fa-car"></i>
+                    <span>Camioneta / SUV</span>
                 </div>
                 <div class="vehiculo-card-fondo">
-                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_red_pickup_truck_side_view_png_18976.png" alt="Camioneta Abierta / Pickup">
+                    <i class="fas fa-truck-pickup"></i>
                     <span>Camioneta Abierta</span>
                 </div>
                 <div class="vehiculo-card-fondo">
-                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_yellow_tipper_truck_side_view_png_18980.png" alt="Volquete / Camión">
-                    <span>Volquete</span>
+                    <i class="fas fa-truck-moving"></i>
+                    <span>Volquete / Camión</span>
                 </div>
             </div>
 
