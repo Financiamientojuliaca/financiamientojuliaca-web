@@ -6,16 +6,57 @@
     <title>Financiamiento Juliaca | Tu Vehículo, Tu Proyecto</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos para la ventana emergente (Modal del Logo) */
+        .logo-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.85); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-modal-content {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            animation: zoom 0.3s ease-in-out;
+        }
+
+        .logo-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logo-modal-close:hover {
+            color: #ff4d4d;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0.7); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navegación -->
     <header>
-       <div class="Logo">
-    <a href="Logo.png" target="_blank" title="Haz clic para ver el Logo en tamaño completo">
-        <img src="Logo.png" alt="Financiamiento Juliaca" style="height: 70px; max-height: 85px; vertical-align: middle; cursor: pointer;">
-    </a>
-</div>
+        <div class="logo">
+            <img src="Logo.png" alt="Financiamiento Juliaca" style="height: 70px; max-height: 85px; vertical-align: middle; cursor: pointer;" onclick="abrirModalLogo()">
+        </div>
         <nav>
             <a href="#inicio">Inicio</a>
             <a href="#marcas">Marcas</a>
@@ -24,6 +65,12 @@
             <a href="https://wa.me/51900327800" target="_blank" class="btn-cotizar"><i class="fab fa-whatsapp"></i> Cotizar Ahora</a>
         </nav>
     </header>
+
+    <!-- Modal Emergente para Ver Logo Grande -->
+    <div id="modalLogo" class="logo-modal" onclick="cerrarModalLogo()">
+        <span class="logo-modal-close" onclick="cerrarModalLogo()">&times;</span>
+        <img class="logo-modal-content" id="imgModal" src="Logo.png" onclick="event.stopPropagation()">
+    </div>
 
     <!-- Hero / Banner Principal -->
     <section id="inicio" class="hero">
@@ -123,9 +170,25 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Lógica de Javascript para tipo de cambio (+0.03) y calculadora -->
+    <!-- Lógica de Javascript -->
     <script>
         let tipoCambio = 3.75 + 0.03; // Base por si falla la API
+
+        // Funciones del Modal del Logo
+        function abrirModalLogo() {
+            document.getElementById('modalLogo').style.display = 'flex';
+        }
+
+        function cerrarModalLogo() {
+            document.getElementById('modalLogo').style.display = 'none';
+        }
+
+        // Cerrar al presionar la tecla ESC (Escape)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                cerrarModalLogo();
+            }
+        });
 
         // Obtener Tipo de Cambio del día y sumarle 0.03 (3 puntos)
         async function obtenerTipoCambio() {
@@ -133,7 +196,6 @@
                 let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 let data = await response.json();
                 if(data && data.rates && data.rates.PEN) {
-                    // Sumamos 0.03 al tipo de cambio oficial
                     tipoCambio = data.rates.PEN + 0.03; 
                     document.getElementById('tc-valor').innerText = tipoCambio.toFixed(2);
                     convertirDesdeUSD();
@@ -170,7 +232,7 @@
                 return;
             }
 
-            // Tasa Anual 0.5% (0.005) -> Tasa Mensual equivalente
+            // Tasa Anual 0.5% -> Tasa Mensual equivalente
             let tasaAnual = 0.005;
             let tasaMensual = tasaAnual / 12;
 
