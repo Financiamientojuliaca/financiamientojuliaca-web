@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financiamiento Juliaca | Tu Vehículo, Tu Proyecto</title>
     <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Estilos para el Modal del Logo */
+        /* Estilos para la ventana emergente (Modal del Logo) */
         .logo-modal {
             display: none; 
             position: fixed; 
@@ -120,14 +120,14 @@
     <section id="inicio" class="hero">
         <div class="hero-content">
             <h1>TU VEHÍCULO, TU PROYECTO,<br><span>NUESTRO COMPROMISO</span></h1>
-            <p>Financiamiento vehicular multimarca en Juliaca y la región sur. Autos, Camionetas, SUVs, Pick-ups, Minivans / Vans y Camiones.</p>
+            <p>Financiamiento vehicular multimarca en Juliaca y la región sur. Autos, Camionetas, SUVs, Pick-ups, Vans y Camiones.</p>
             
             <div class="hero-buttons">
                 <a href="#simulador" class="btn-primary">Simular Financiamiento</a>
                 <a href="https://wa.me/c/51900327800" target="_blank" class="btn-secondary"><i class="fas fa-store"></i> Ver Catálogo WhatsApp</a>
             </div>
 
-            <!-- Galería con Imágenes Reales de Vehículos -->
+            <!-- Mosaico de Categorías de Vehículos -->
             <div class="vehiculos-fondo-container">
                 <div class="vehiculo-card-fondo">
                     <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=400&q=80" alt="Auto Sedán">
@@ -142,8 +142,7 @@
                     <span>Camioneta Abierta</span>
                 </div>
                 <div class="vehiculo-card-fondo">
-                    <!-- PEGA AQUÍ TU ENLACE RAW EN LUGAR DE ESTE TEXTO -->
-                    <img src="PEGA_AQUI_TU_ENLACE_RAW" alt="Mercedes Benz Sprinter Van">
+                    <img src="velocista.jpg" alt="Minivan o Van Mercedes Sprinter">
                     <span>Minivan / Van</span>
                 </div>
                 <div class="vehiculo-card-fondo">
@@ -210,9 +209,9 @@
             <div class="resultado-box">
                 <h3>Cuota Mensual Estimada:</h3>
                 <div id="resultado-cuota" class="monto-cuota">S/ 0.00</div>
-                <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600;">($ 0.00 USD)</div>
+                <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600; margin-bottom: 15px;">($ 0.00 USD)</div>
                 <small>*Calculado con tasa de interés del 0.5% anual.</small>
-                <br>
+                <br><br>
                 <button class="btn-primary btn-full" onclick="enviarSimulacionWhatsApp()">Solicitar Evaluación con esta Cuota</button>
             </div>
         </div>
@@ -226,7 +225,7 @@
                 <i class="fab fa-whatsapp"></i>
                 <span>WhatsApp: 900 327 800</span>
             </a>
-            <a href="url?id=13financiamientojuliaca_sur/" target="_blank" class="red-card ig">
+            <a href="https://www.instagram.com/financiamientojuliaca_sur/" target="_blank" class="red-card ig">
                 <i class="fab fa-instagram"></i>
                 <span>Instagram @financiamientojuliaca_sur</span>
             </a>
@@ -292,6 +291,10 @@
             calcularCuota();
         }
 
+        function formatoMoneda(valor) {
+            return valor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         function calcularCuota() {
             let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
             let inicialSoles = parseFloat(document.getElementById('inicial').value) || 0;
@@ -311,8 +314,8 @@
             let cuotaSoles = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
             let cuotaUSD = cuotaSoles / tipoCambio;
 
-            document.getElementById('resultado-cuota').innerText = "S/ " + cuotaSoles.toFixed(2);
-            document.getElementById('resultado-cuota-usd').innerText = "($ " + cuotaUSD.toFixed(2) + " USD)";
+            document.getElementById('resultado-cuota').innerText = "S/ " + formatoMoneda(cuotaSoles);
+            document.getElementById('resultado-cuota-usd').innerText = "($ " + formatoMoneda(cuotaUSD) + " USD)";
         }
 
         function enviarSimulacionWhatsApp() {
