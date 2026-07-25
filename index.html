@@ -119,17 +119,18 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Lógica de Javascript para tipo de cambio y calculadora -->
+    <!-- Lógica de Javascript para tipo de cambio (+0.03) y calculadora -->
     <script>
-        let tipoCambio = 3.75; // Valor por defecto por si tarda la API
+        let tipoCambio = 3.75 + 0.03; // Base por si falla la API
 
-        // Obtener Tipo de Cambio del día automáticamente
+        // Obtener Tipo de Cambio del día y sumarle 0.03 (3 puntos)
         async function obtenerTipoCambio() {
             try {
                 let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 let data = await response.json();
                 if(data && data.rates && data.rates.PEN) {
-                    tipoCambio = data.rates.PEN;
+                    // Sumamos 0.03 al tipo de cambio oficial
+                    tipoCambio = data.rates.PEN + 0.03; 
                     document.getElementById('tc-valor').innerText = tipoCambio.toFixed(2);
                     convertirDesdeUSD();
                 }
@@ -165,7 +166,7 @@
                 return;
             }
 
-            // Tasa Anual 0.5% (0.005) -> Tasa Mensual equivalente: (0.005 / 12)
+            // Tasa Anual 0.5% (0.005) -> Tasa Mensual equivalente
             let tasaAnual = 0.005;
             let tasaMensual = tasaAnual / 12;
 
