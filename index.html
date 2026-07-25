@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financiamiento Juliaca | Tu Vehículo, Tu Proyecto</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navegación -->
+    <header>
+        <div class="logo">Financiamiento <span>Juliaca</span></div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#marcas">Marcas</a>
+            <a href="#simulador">Simulador</a>
+            <a href="#contacto">Contacto</a>
+            <a href="https://wa.me/51900327800" target="_blank" class="btn-cotizar"><i class="fab fa-whatsapp"></i> Cotizar Ahora</a>
+        </nav>
+    </header>
+
+    <!-- Hero / Banner Principal -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>TU VEHÍCULO, TU PROYECTO,<br><span>NUESTRO COMPROMISO</span></h1>
+            <p>Financiamiento vehicular multimarca en Juliaca y la región sur. Autos, Camionetas, SUVs, Pick-ups, Vans y Camiones.</p>
+            <div class="hero-buttons">
+                <a href="#simulador" class="btn-primary">Simular Financiamiento</a>
+                <a href="https://wa.me/c/51900327800" target="_blank" class="btn-secondary"><i class="fas fa-store"></i> Ver Catálogo WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marcas Populares -->
+    <section id="marcas" class="marcas-section">
+        <h2>Trabajamos con <span>Todas las Marcas</span> del Mercado</h2>
+        <p>Elige tu marca preferida y solicita la evaluación de tu crédito al instante.</p>
+        <div class="grid-marcas">
+            <div class="marca-card" onclick="solicitarPorMarca('Toyota')">TOYOTA</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Hyundai')">HYUNDAI</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Kia')">KIA</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Nissan')">NISSAN</div>
+            <div class="marca-card" onclick="solicitarPorMarca('JAC')">JAC</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Foton')">FOTON</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Chevrolet')">CHEVROLET</div>
+            <div class="marca-card" onclick="solicitarPorMarca('Otras Marcas')">+ MÁS MARCAS</div>
+        </div>
+    </section>
+
+    <!-- Simulador de Financiamiento -->
+    <section id="simulador" class="simulador-section">
+        <h2>Simulador de <span>Cuotas Estimadas</span></h2>
+        <div class="simulador-box">
+            <div class="form-group">
+                <label>Precio del Vehículo (S/):</label>
+                <input type="number" id="precio" value="60000" oninput="calcularCuota()">
+            </div>
+            <div class="form-group">
+                <label>Cuota Inicial (S/):</label>
+                <input type="number" id="inicial" value="12000" oninput="calcularCuota()">
+            </div>
+            <div class="form-group">
+                <label>Plazo en meses:</label>
+                <select id="plazo" onchange="calcularCuota()">
+                    <option value="12">12 meses</option>
+                    <option value="24">24 meses</option>
+                    <option value="36" selected>36 meses</option>
+                    <option value="48">48 meses</option>
+                    <option value="60">60 meses</option>
+                </select>
+            </div>
+            <div class="resultado-box">
+                <h3>Cuota Mensual Estimada:</h3>
+                <div id="resultado-cuota" class="monto-cuota">S/ 0.00</div>
+                <small>*Monto referencial sujeto a evaluación crediticia.</small>
+                <br>
+                <button class="btn-primary btn-full" onclick="enviarSimulacionWhatsApp()">Solicitar Evaluación con esta Cuota</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Redes y Contacto -->
+    <section id="contacto" class="contacto-section">
+        <h2>Contacto y Redes Sociales</h2>
+        <div class="redes-grid">
+            <a href="https://wa.me/51900327800" target="_blank" class="red-card wa">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp: 900 327 800</span>
+            </a>
+            <a href="https://www.instagram.com/financiamientojuliaca_sur/" target="_blank" class="red-card ig">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram @financiamientojuliaca_sur</span>
+            </a>
+            <a href="https://www.tiktok.com/@financiamiento.ju?_r=1&_t=ZS-98HI3tRgWU4" target="_blank" class="red-card tt">
+                <i class="fab fa-tiktok"></i>
+                <span>TikTok @financiamiento.ju</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="https://wa.me/51900327800?text=Hola,%20deseo%20información%20sobre%20un%20financiamiento%20vehicular." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Lógica de Javascript para la calculadora -->
+    <script>
+        function calcularCuota() {
+            let precio = parseFloat(document.getElementById('precio').value) || 0;
+            let inicial = parseFloat(document.getElementById('inicial').value) || 0;
+            let plazo = parseInt(document.getElementById('plazo').value);
+
+            let montoFinanciar = precio - inicial;
+            if (montoFinanciar <= 0) {
+                document.getElementById('resultado-cuota').innerText = "S/ 0.00";
+                return;
+            }
+
+            let tasaMensual = 0.015; // Tasa referencial 1.5%
+            let cuota = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
+
+            document.getElementById('resultado-cuota').innerText = "S/ " + cuota.toFixed(2);
+        }
+
+        function enviarSimulacionWhatsApp() {
+            let precio = document.getElementById('precio').value;
+            let inicial = document.getElementById('inicial').value;
+            let plazo = document.getElementById('plazo').value;
+            let cuota = document.getElementById('resultado-cuota').innerText;
+
+            let mensaje = `Hola Financiamiento Juliaca, realicé una simulación en la web:%0A- *Precio Auto:* S/ ${precio}%0A- *Cuota Inicial:* S/ ${inicial}%0A- *Plazo:* ${plazo} meses%0A- *Cuota estimada:* ${cuota}%0A%0ADeseo solicitar mi evaluación crediticia.`;
+            window.open(`https://wa.me/51900327800?text=${mensaje}`, '_blank');
+        }
+
+        function solicitarPorMarca(marca) {
+            let mensaje = `Hola Financiamiento Juliaca, estoy interesado en financiar un vehículo de la marca *${marca}*. ¿Me podrían dar información?`;
+            window.open(`https://wa.me/51900327800?text=${mensaje}`, '_blank');
+        }
+
+        calcularCuota();
+    </script>
+</body>
+</html>
