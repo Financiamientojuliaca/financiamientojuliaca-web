@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -179,6 +180,11 @@
             </div>
 
             <div class="form-group">
+                <label>Nombres y Apellidos Completos:</label>
+                <input type="text" id="nombreCliente" placeholder="Ej. Juan Pérez Quispe">
+            </div>
+
+            <div class="form-group">
                 <label>Número de DNI del Titular:</label>
                 <input type="text" id="dniCliente" maxlength="8" placeholder="Ingrese 8 dígitos de su DNI">
             </div>
@@ -320,28 +326,20 @@
             document.getElementById('resultado-cuota-usd').innerText = "($ " + formatoMoneda(cuotaUSD) + " USD)";
         }
 
-        async function enviarSimulacionWhatsApp() {
+        function enviarSimulacionWhatsApp() {
+            let nombre = document.getElementById('nombreCliente').value.trim();
             let dni = document.getElementById('dniCliente').value.trim();
+
+            if (nombre === "") {
+                alert("Por favor, ingrese sus Nombres y Apellidos.");
+                document.getElementById('nombreCliente').focus();
+                return;
+            }
 
             if (dni.length !== 8 || isNaN(dni)) {
                 alert("Por favor, ingrese un número de DNI válido de 8 dígitos.");
                 document.getElementById('dniCliente').focus();
                 return;
-            }
-
-            let nombreCompleto = "No especificado";
-
-            // Intentar obtener el nombre a través de la API pública de RENIEC
-            try {
-                let resp = await fetch(`https://api.apis.net.pe/v1/dni?numero=${dni}`);
-                if (resp.ok) {
-                    let datosDni = await resp.json();
-                    if (datosDni && datosDni.nombre) {
-                        nombreCompleto = datosDni.nombre;
-                    }
-                }
-            } catch (e) {
-                console.log("No se pudo consultar el nombre automático:", e);
             }
 
             let precioSoles = document.getElementById('precio').value;
@@ -352,7 +350,7 @@
             let cuotaUSD = document.getElementById('resultado-cuota-usd').innerText;
 
             let mensaje = `Hola Financiamiento Juliaca, solicito evaluación crediticia:%0A%0A` +
-                          `👤 *Cliente:* ${nombreCompleto}%0A` +
+                          `👤 *Cliente:* ${nombre}%0A` +
                           `🆔 *DNI:* ${dni}%0A%0A` +
                           `📌 *Datos de la Simulación:*%0A` +
                           `- *Precio Auto:* $ ${precioUSD} USD (S/ ${precioSoles})%0A` +
