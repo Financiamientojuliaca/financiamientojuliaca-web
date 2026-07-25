@@ -223,7 +223,7 @@
                 <i class="fab fa-whatsapp"></i>
                 <span>WhatsApp: 900 327 800</span>
             </a>
-            <a href="url?id=13financiamientojuliaca_sur/" target="_blank" class="red-card ig">
+            <a href="https://www.instagram.com/financiamientojuliaca_sur/" target="_blank" class="red-card ig">
                 <i class="fab fa-instagram"></i>
                 <span>Instagram @financiamientojuliaca_sur</span>
             </a>
@@ -289,10 +289,6 @@
             calcularCuota();
         }
 
-        function formatoMoneda(valor) {
-            return valor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
         function calcularCuota() {
             let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
             let inicialSoles = parseFloat(document.getElementById('inicial').value) || 0;
@@ -305,15 +301,15 @@
                 return;
             }
 
-            // Tasa Anual 0.5% -> Tasa Mensual equivalente (Cálculo interno)
+            // Tasa Anual 0.5% -> Tasa Mensual equivalente (Cálculo puramente interno)
             let tasaAnual = 0.005;
             let tasaMensual = tasaAnual / 12;
 
             let cuotaSoles = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
             let cuotaUSD = cuotaSoles / tipoCambio;
 
-            document.getElementById('resultado-cuota').innerText = "S/ " + formatoMoneda(cuotaSoles);
-            document.getElementById('resultado-cuota-usd').innerText = "($ " + formatoMoneda(cuotaUSD) + " USD)";
+            document.getElementById('resultado-cuota').innerText = "S/ " + cuotaSoles.toFixed(2);
+            document.getElementById('resultado-cuota-usd').innerText = "($ " + cuotaUSD.toFixed(2) + " USD)";
         }
 
         function enviarSimulacionWhatsApp() {
