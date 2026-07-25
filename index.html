@@ -92,6 +92,15 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
+
+        /* Estilo sutil para el Tipo de Cambio */
+        .tc-sutil {
+            margin: 4px 0;
+            text-align: center;
+            font-size: 0.72rem;
+            color: #888888;
+            opacity: 0.75;
+        }
     </style>
 </head>
 <body>
@@ -189,9 +198,9 @@
                 <input type="number" id="precioUSD" value="16000" oninput="convertirDesdeUSD()">
             </div>
 
-            <!-- Tipo de Cambio Ubicado Entre Dólares y Soles -->
-            <div class="tc-info" style="margin: 10px 0; text-align: center;">
-                <small><i class="fas fa-sync-alt"></i> Tipo de cambio del día: <strong>1 USD = S/ <span id="tc-valor">...</span></strong></small>
+            <!-- Tipo de cambio miniaturizado y discreto entre USD y Soles -->
+            <div class="tc-sutil">
+                <span>T.C. del día: 1 USD = S/ <span id="tc-valor">...</span></span>
             </div>
 
             <div class="form-group">
