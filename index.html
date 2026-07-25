@@ -53,14 +53,26 @@
     <section id="simulador" class="simulador-section">
         <h2>Simulador de <span>Cuotas Estimadas</span></h2>
         <div class="simulador-box">
-            <div class="form-group">
-                <label>Precio del Vehículo (S/):</label>
-                <input type="number" id="precio" value="60000" oninput="calcularCuota()">
+            
+            <div class="tc-info">
+                <small><i class="fas fa-sync-alt"></i> Tipo de cambio del día: <strong>1 USD = S/ <span id="tc-valor">...</span></strong></small>
             </div>
+
+            <div class="form-group">
+                <label>Precio en Dólares (USD $):</label>
+                <input type="number" id="precioUSD" value="16000" oninput="convertirDesdeUSD()">
+            </div>
+
+            <div class="form-group">
+                <label>Precio en Soles (S/):</label>
+                <input type="number" id="precio" value="60000" oninput="convertirDesdeSoles()">
+            </div>
+
             <div class="form-group">
                 <label>Cuota Inicial (S/):</label>
                 <input type="number" id="inicial" value="12000" oninput="calcularCuota()">
             </div>
+
             <div class="form-group">
                 <label>Plazo en meses:</label>
                 <select id="plazo" onchange="calcularCuota()">
@@ -71,10 +83,12 @@
                     <option value="60">60 meses</option>
                 </select>
             </div>
+
             <div class="resultado-box">
                 <h3>Cuota Mensual Estimada:</h3>
                 <div id="resultado-cuota" class="monto-cuota">S/ 0.00</div>
-                <small>*Monto referencial sujeto a evaluación crediticia.</small>
+                <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600;">($ 0.00 USD)</div>
+                <small>*Calculado con tasa de interés del 0.5% anual.</small>
                 <br>
                 <button class="btn-primary btn-full" onclick="enviarSimulacionWhatsApp()">Solicitar Evaluación con esta Cuota</button>
             </div>
@@ -105,32 +119,72 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Lógica de Javascript para la calculadora -->
+    <!-- Lógica de Javascript para tipo de cambio y calculadora -->
     <script>
+        let tipoCambio = 3.75; // Valor por defecto por si tarda la API
+
+        // Obtener Tipo de Cambio del día automáticamente
+        async function obtenerTipoCambio() {
+            try {
+                let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                let data = await response.json();
+                if(data && data.rates && data.rates.PEN) {
+                    tipoCambio = data.rates.PEN;
+                    document.getElementById('tc-valor').innerText = tipoCambio.toFixed(2);
+                    convertirDesdeUSD();
+                }
+            } catch (error) {
+                console.log("Error consultando tipo de cambio:", error);
+                document.getElementById('tc-valor').innerText = tipoCambio.toFixed(2);
+            }
+        }
+
+        function convertirDesdeUSD() {
+            let usd = parseFloat(document.getElementById('precioUSD').value) || 0;
+            let soles = usd * tipoCambio;
+            document.getElementById('precio').value = soles.toFixed(2);
+            calcularCuota();
+        }
+
+        function convertirDesdeSoles() {
+            let soles = parseFloat(document.getElementById('precio').value) || 0;
+            let usd = soles / tipoCambio;
+            document.getElementById('precioUSD').value = usd.toFixed(2);
+            calcularCuota();
+        }
+
         function calcularCuota() {
-            let precio = parseFloat(document.getElementById('precio').value) || 0;
-            let inicial = parseFloat(document.getElementById('inicial').value) || 0;
+            let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
+            let inicialSoles = parseFloat(document.getElementById('inicial').value) || 0;
             let plazo = parseInt(document.getElementById('plazo').value);
 
-            let montoFinanciar = precio - inicial;
+            let montoFinanciar = precioSoles - inicialSoles;
             if (montoFinanciar <= 0) {
                 document.getElementById('resultado-cuota').innerText = "S/ 0.00";
+                document.getElementById('resultado-cuota-usd').innerText = "($ 0.00 USD)";
                 return;
             }
 
-            let tasaMensual = 0.015; // Tasa referencial 1.5%
-            let cuota = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
+            // Tasa Anual 0.5% (0.005) -> Tasa Mensual equivalente: (0.005 / 12)
+            let tasaAnual = 0.005;
+            let tasaMensual = tasaAnual / 12;
 
-            document.getElementById('resultado-cuota').innerText = "S/ " + cuota.toFixed(2);
+            let cuotaSoles = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
+            let cuotaUSD = cuotaSoles / tipoCambio;
+
+            document.getElementById('resultado-cuota').innerText = "S/ " + cuotaSoles.toFixed(2);
+            document.getElementById('resultado-cuota-usd').innerText = "($ " + cuotaUSD.toFixed(2) + " USD)";
         }
 
         function enviarSimulacionWhatsApp() {
-            let precio = document.getElementById('precio').value;
+            let precioSoles = document.getElementById('precio').value;
+            let precioUSD = document.getElementById('precioUSD').value;
             let inicial = document.getElementById('inicial').value;
             let plazo = document.getElementById('plazo').value;
-            let cuota = document.getElementById('resultado-cuota').innerText;
+            let cuotaSoles = document.getElementById('resultado-cuota').innerText;
+            let cuotaUSD = document.getElementById('resultado-cuota-usd').innerText;
 
-            let mensaje = `Hola Financiamiento Juliaca, realicé una simulación en la web:%0A- *Precio Auto:* S/ ${precio}%0A- *Cuota Inicial:* S/ ${inicial}%0A- *Plazo:* ${plazo} meses%0A- *Cuota estimada:* ${cuota}%0A%0ADeseo solicitar mi evaluación crediticia.`;
+            let mensaje = `Hola Financiamiento Juliaca, realicé una simulación en la web:%0A- *Precio Auto:* $ ${precioUSD} USD (S/ ${precioSoles})%0A- *Cuota Inicial:* S/ ${inicial}%0A- *Plazo:* ${plazo} meses%0A- *Cuota estimada:* ${cuotaSoles} ${cuotaUSD}%0A%0ADeseo solicitar mi evaluación crediticia.`;
             window.open(`https://wa.me/51900327800?text=${mensaje}`, '_blank');
         }
 
@@ -139,7 +193,7 @@
             window.open(`https://wa.me/51900327800?text=${mensaje}`, '_blank');
         }
 
-        calcularCuota();
+        obtenerTipoCambio();
     </script>
 </body>
 </html>
