@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financiamiento Juliaca | Tu Vehículo, Tu Proyecto</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Estilos para el Modal del Logo */
@@ -142,7 +142,7 @@
                     <span>Camioneta Abierta</span>
                 </div>
                 <div class="vehiculo-card-fondo">
-                    <img src="https://github.com/Financiamientojuliaca/financiamientojuliaca-web/blob/main/sprinter.jpg?raw=true" alt="Mercedes Benz Sprinter Van">
+                    <img src="velocista.jpg" alt="Minivan o Van Mercedes Sprinter">
                     <span>Minivan / Van</span>
                 </div>
                 <div class="vehiculo-card-fondo">
@@ -209,9 +209,7 @@
             <div class="resultado-box">
                 <h3>Cuota Mensual Estimada:</h3>
                 <div id="resultado-cuota" class="monto-cuota">S/ 0.00</div>
-                <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600;">($ 0.00 USD)</div>
-                <small>*Calculado con tasa de interés del 0.5% anual.</small>
-                <br>
+                <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600; margin-bottom: 15px;">($ 0.00 USD)</div>
                 <button class="btn-primary btn-full" onclick="enviarSimulacionWhatsApp()">Solicitar Evaluación con esta Cuota</button>
             </div>
         </div>
@@ -291,6 +289,10 @@
             calcularCuota();
         }
 
+        function formatoMoneda(valor) {
+            return valor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         function calcularCuota() {
             let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
             let inicialSoles = parseFloat(document.getElementById('inicial').value) || 0;
@@ -303,15 +305,15 @@
                 return;
             }
 
-            // Tasa Anual 0.5% -> Tasa Mensual equivalente
+            // Tasa Anual 0.5% -> Tasa Mensual equivalente (Cálculo interno)
             let tasaAnual = 0.005;
             let tasaMensual = tasaAnual / 12;
 
             let cuotaSoles = (montoFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
             let cuotaUSD = cuotaSoles / tipoCambio;
 
-            document.getElementById('resultado-cuota').innerText = "S/ " + cuotaSoles.toFixed(2);
-            document.getElementById('resultado-cuota-usd').innerText = "($ " + cuotaUSD.toFixed(2) + " USD)";
+            document.getElementById('resultado-cuota').innerText = "S/ " + formatoMoneda(cuotaSoles);
+            document.getElementById('resultado-cuota-usd').innerText = "($ " + formatoMoneda(cuotaUSD) + " USD)";
         }
 
         function enviarSimulacionWhatsApp() {
