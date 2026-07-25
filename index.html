@@ -179,6 +179,11 @@
             </div>
 
             <div class="form-group">
+                <label>Número de DNI del Titular:</label>
+                <input type="text" id="dniCliente" maxlength="8" placeholder="Ingrese 8 dígitos de su DNI">
+            </div>
+
+            <div class="form-group">
                 <label>Precio en Dólares (USD $):</label>
                 <input type="number" id="precioUSD" value="16000" oninput="convertirDesdeUSD()">
             </div>
@@ -209,8 +214,6 @@
                 <h3>Cuota Mensual Estimada:</h3>
                 <div id="resultado-cuota" class="monto-cuota">S/ 0.00</div>
                 <div id="resultado-cuota-usd" style="font-size: 1.1rem; color: #555; font-weight: 600; margin-bottom: 10px;">($ 0.00 USD)</div>
-                <small>*Calculado con tasa de interés del 0.5% anual.</small>
-                <br><br>
                 <button class="btn-primary btn-full" onclick="enviarSimulacionWhatsApp()">Solicitar Evaluación con esta Cuota</button>
             </div>
         </div>
@@ -317,7 +320,30 @@
             document.getElementById('resultado-cuota-usd').innerText = "($ " + formatoMoneda(cuotaUSD) + " USD)";
         }
 
-        function enviarSimulacionWhatsApp() {
+        async function enviarSimulacionWhatsApp() {
+            let dni = document.getElementById('dniCliente').value.trim();
+
+            if (dni.length !== 8 || isNaN(dni)) {
+                alert("Por favor, ingrese un número de DNI válido de 8 dígitos.");
+                document.getElementById('dniCliente').focus();
+                return;
+            }
+
+            let nombreCompleto = "No especificado";
+
+            // Intentar obtener el nombre a través de la API pública de RENIEC
+            try {
+                let resp = await fetch(`https://api.apis.net.pe/v1/dni?numero=${dni}`);
+                if (resp.ok) {
+                    let datosDni = await resp.json();
+                    if (datosDni && datosDni.nombre) {
+                        nombreCompleto = datosDni.nombre;
+                    }
+                }
+            } catch (e) {
+                console.log("No se pudo consultar el nombre automático:", e);
+            }
+
             let precioSoles = document.getElementById('precio').value;
             let precioUSD = document.getElementById('precioUSD').value;
             let inicial = document.getElementById('inicial').value;
@@ -325,7 +351,16 @@
             let cuotaSoles = document.getElementById('resultado-cuota').innerText;
             let cuotaUSD = document.getElementById('resultado-cuota-usd').innerText;
 
-            let mensaje = `Hola Financiamiento Juliaca, realicé una simulación en la web:%0A- *Precio Auto:* $ ${precioUSD} USD (S/ ${precioSoles})%0A- *Cuota Inicial:* S/ ${inicial}%0A- *Plazo:* ${plazo} meses%0A- *Cuota estimada:* ${cuotaSoles} ${cuotaUSD}%0A%0ADeseo solicitar mi evaluación crediticia.`;
+            let mensaje = `Hola Financiamiento Juliaca, solicito evaluación crediticia:%0A%0A` +
+                          `👤 *Cliente:* ${nombreCompleto}%0A` +
+                          `🆔 *DNI:* ${dni}%0A%0A` +
+                          `📌 *Datos de la Simulación:*%0A` +
+                          `- *Precio Auto:* $ ${precioUSD} USD (S/ ${precioSoles})%0A` +
+                          `- *Cuota Inicial:* S/ ${inicial}%0A` +
+                          `- *Plazo:* ${plazo} meses%0A` +
+                          `- *Cuota estimada:* ${cuotaSoles} ${cuotaUSD}%0A%0A` +
+                          `Quedo a la espera de sus comentarios.`;
+
             window.open(`https://wa.me/51900327800?text=${mensaje}`, '_blank');
         }
 
