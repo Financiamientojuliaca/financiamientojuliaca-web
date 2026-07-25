@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Estilos para la ventana emergente (Modal del Logo) */
+        /* Estilos para el Modal del Logo */
         .logo-modal {
             display: none; 
             position: fixed; 
@@ -48,6 +48,50 @@
             from {transform: scale(0.7); opacity: 0;}
             to {transform: scale(1); opacity: 1;}
         }
+
+        /* Galería/Mosaico de Vehículos de Fondo en la Sección Principal */
+        .vehiculos-fondo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 35px;
+            padding: 10px;
+        }
+
+        .vehiculo-card-fondo {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 15px;
+            width: 180px;
+            text-align: center;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .vehiculo-card-fondo:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .vehiculo-card-fondo img {
+            width: 100%;
+            height: 90px;
+            object-fit: contain;
+            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.4));
+        }
+
+        .vehiculo-card-fondo span {
+            display: block;
+            margin-top: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -77,10 +121,32 @@
         <div class="hero-content">
             <h1>TU VEHÍCULO, TU PROYECTO,<br><span>NUESTRO COMPROMISO</span></h1>
             <p>Financiamiento vehicular multimarca en Juliaca y la región sur. Autos, Camionetas, SUVs, Pick-ups, Vans y Camiones.</p>
+            
             <div class="hero-buttons">
                 <a href="#simulador" class="btn-primary">Simular Financiamiento</a>
                 <a href="https://wa.me/c/51900327800" target="_blank" class="btn-secondary"><i class="fas fa-store"></i> Ver Catálogo WhatsApp</a>
             </div>
+
+            <!-- Mosaico de Vehículos (Auto, SUV/Camioneta Cerrada, Pickup/Camioneta Abierta, Volquete) -->
+            <div class="vehiculos-fondo-container">
+                <div class="vehiculo-card-fondo">
+                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_white_sedan_car_side_view_png_18968.png" alt="Auto Sedán">
+                    <span>Auto</span>
+                </div>
+                <div class="vehiculo-card-fondo">
+                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_black_suv_car_side_view_png_18972.png" alt="Camioneta Cerrada / SUV">
+                    <span>Camioneta Cerrada</span>
+                </div>
+                <div class="vehiculo-card-fondo">
+                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_red_pickup_truck_side_view_png_18976.png" alt="Camioneta Abierta / Pickup">
+                    <span>Camioneta Abierta</span>
+                </div>
+                <div class="vehiculo-card-fondo">
+                    <img src="https://images.pngunes.com/png/2023/11/02/pngunes_yellow_tipper_truck_side_view_png_18980.png" alt="Volquete / Camión">
+                    <span>Volquete</span>
+                </div>
+            </div>
+
         </div>
     </section>
 
