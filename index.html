@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -174,10 +173,6 @@ HTML
     <section id="simulador" class="simulador-section">
         <h2>Simulador de <span>Cuotas Estimadas</span></h2>
         <div class="simulador-box">
-            
-            <div class="tc-info">
-                <small><i class="fas fa-sync-alt"></i> Tipo de cambio del día: <strong>1 USD = S/ <span id="tc-valor">...</span></strong></small>
-            </div>
 
             <div class="form-group">
                 <label>Nombres y Apellidos Completos:</label>
@@ -192,6 +187,11 @@ HTML
             <div class="form-group">
                 <label>Precio en Dólares (USD $):</label>
                 <input type="number" id="precioUSD" value="16000" oninput="convertirDesdeUSD()">
+            </div>
+
+            <!-- Tipo de Cambio Ubicado Entre Dólares y Soles -->
+            <div class="tc-info" style="margin: 10px 0; text-align: center;">
+                <small><i class="fas fa-sync-alt"></i> Tipo de cambio del día: <strong>1 USD = S/ <span id="tc-valor">...</span></strong></small>
             </div>
 
             <div class="form-group">
@@ -251,7 +251,7 @@ HTML
 
     <!-- Lógica de Javascript -->
     <script>
-        let tipoCambio = 3.75 + 0.03; // Base por si falla la API
+        let tipoCambio = 3.75 + 0.04; // Base con +0.04 (4 puntos) por si falla la API
 
         // Funciones del Modal del Logo
         function abrirModalLogo() {
@@ -269,13 +269,13 @@ HTML
             }
         });
 
-        // Obtener Tipo de Cambio del día y sumarle 0.03 (3 puntos)
+        // Obtener Tipo de Cambio del día y sumarle 0.04 (4 puntos)
         async function obtenerTipoCambio() {
             try {
                 let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
                 let data = await response.json();
                 if(data && data.rates && data.rates.PEN) {
-                    tipoCambio = data.rates.PEN + 0.03; 
+                    tipoCambio = data.rates.PEN + 0.04; 
                     document.getElementById('tc-valor').innerText = tipoCambio.toFixed(2);
                     convertirDesdeUSD();
                 }
