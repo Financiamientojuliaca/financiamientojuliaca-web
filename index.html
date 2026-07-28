@@ -195,7 +195,7 @@
 
             <div class="form-group">
                 <label>Precio en Dólares (USD $):</label>
-                <input type="number" id="precioUSD" value="16000" oninput="convertirDesdeUSD()">
+                <input type="text" id="precioUSD" value="16,000.00" oninput="convertirDesdeUSD()" onblur="formatearInputBlur('precioUSD')">
             </div>
 
             <!-- Tipo de cambio miniaturizado y discreto entre USD y Soles -->
@@ -205,12 +205,12 @@
 
             <div class="form-group">
                 <label>Precio en Soles (S/):</label>
-                <input type="number" id="precio" value="60000" oninput="convertirDesdeSoles()">
+                <input type="text" id="precio" value="60,000.00" oninput="convertirDesdeSoles()" onblur="formatearInputBlur('precio')">
             </div>
 
             <div class="form-group">
                 <label>Cuota Inicial (S/):</label>
-                <input type="number" id="inicial" value="12000" oninput="calcularCuota()">
+                <input type="text" id="inicial" value="12,000.00" oninput="calcularCuota()" onblur="formatearInputBlur('inicial')">
             </div>
 
             <div class="form-group">
@@ -294,28 +294,40 @@
             }
         }
 
-        function convertirDesdeUSD() {
-            let usd = parseFloat(document.getElementById('precioUSD').value) || 0;
-            let soles = usd * tipoCambio;
-            document.getElementById('precio').value = soles.toFixed(2);
-            calcularCuota();
+        // Funciones auxiliares de formateo y parseo
+        function limpiarNumero(texto) {
+            if (!texto) return 0;
+            let numStr = texto.toString().replace(/,/g, '');
+            return parseFloat(numStr) || 0;
         }
 
-        function convertirDesdeSoles() {
-            let soles = parseFloat(document.getElementById('precio').value) || 0;
-            let usd = soles / tipoCambio;
-            document.getElementById('precioUSD').value = usd.toFixed(2);
-            calcularCuota();
-        }
-
-        // Función para formatear con comas en miles y 2 decimales
         function formatoMoneda(valor) {
             return valor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
+        function formatearInputBlur(id) {
+            let elem = document.getElementById(id);
+            let val = limpiarNumero(elem.value);
+            elem.value = formatoMoneda(val);
+        }
+
+        function convertirDesdeUSD() {
+            let usd = limpiarNumero(document.getElementById('precioUSD').value);
+            let soles = usd * tipoCambio;
+            document.getElementById('precio').value = formatoMoneda(soles);
+            calcularCuota();
+        }
+
+        function convertirDesdeSoles() {
+            let soles = limpiarNumero(document.getElementById('precio').value);
+            let usd = soles / tipoCambio;
+            document.getElementById('precioUSD').value = formatoMoneda(usd);
+            calcularCuota();
+        }
+
         function calcularCuota() {
-            let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
-            let inicialSoles = parseFloat(document.getElementById('inicial').value) || 0;
+            let precioSoles = limpiarNumero(document.getElementById('precio').value);
+            let inicialSoles = limpiarNumero(document.getElementById('inicial').value);
             let plazo = parseInt(document.getElementById('plazo').value);
 
             let montoFinanciar = precioSoles - inicialSoles;
@@ -352,9 +364,9 @@
                 return;
             }
 
-            let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
-            let precioUSD = parseFloat(document.getElementById('precioUSD').value) || 0;
-            let inicial = parseFloat(document.getElementById('inicial').value) || 0;
+            let precioSoles = limpiarNumero(document.getElementById('precio').value);
+            let precioUSD = limpiarNumero(document.getElementById('precioUSD').value);
+            let inicial = limpiarNumero(document.getElementById('inicial').value);
             let plazo = document.getElementById('plazo').value;
             let cuotaSoles = document.getElementById('resultado-cuota').innerText;
             let cuotaUSD = document.getElementById('resultado-cuota-usd').innerText;
