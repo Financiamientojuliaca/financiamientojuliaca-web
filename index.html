@@ -308,6 +308,7 @@
             calcularCuota();
         }
 
+        // Función para formatear con comas en miles y 2 decimales
         function formatoMoneda(valor) {
             return valor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
@@ -351,9 +352,9 @@
                 return;
             }
 
-            let precioSoles = document.getElementById('precio').value;
-            let precioUSD = document.getElementById('precioUSD').value;
-            let inicial = document.getElementById('inicial').value;
+            let precioSoles = parseFloat(document.getElementById('precio').value) || 0;
+            let precioUSD = parseFloat(document.getElementById('precioUSD').value) || 0;
+            let inicial = parseFloat(document.getElementById('inicial').value) || 0;
             let plazo = document.getElementById('plazo').value;
             let cuotaSoles = document.getElementById('resultado-cuota').innerText;
             let cuotaUSD = document.getElementById('resultado-cuota-usd').innerText;
@@ -362,8 +363,8 @@
                           `👤 *Cliente:* ${nombre}%0A` +
                           `🆔 *DNI:* ${dni}%0A%0A` +
                           `📌 *Datos de la Simulación:*%0A` +
-                          `- *Precio Auto:* $ ${precioUSD} USD (S/ ${precioSoles})%0A` +
-                          `- *Cuota Inicial:* S/ ${inicial}%0A` +
+                          `- *Precio Auto:* $ ${formatoMoneda(precioUSD)} USD (S/ ${formatoMoneda(precioSoles)})%0A` +
+                          `- *Cuota Inicial:* S/ ${formatoMoneda(inicial)}%0A` +
                           `- *Plazo:* ${plazo} meses%0A` +
                           `- *Cuota estimada:* ${cuotaSoles} ${cuotaUSD}%0A%0A` +
                           `Quedo a la espera de sus comentarios.`;
